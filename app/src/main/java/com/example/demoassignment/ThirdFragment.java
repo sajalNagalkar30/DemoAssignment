@@ -17,23 +17,19 @@ import android.widget.ProgressBar;
 
 import com.example.demoassignment.adapter.PaginationAdapter;
 import com.example.demoassignment.model.Deal;
-import com.example.demoassignment.model.DealViewModel;
+import com.example.demoassignment.model.TopDealViewModel;
 
 import java.util.List;
 
 
 public class ThirdFragment extends Fragment {
 
-    private DealViewModel dealViewModel;
+    private TopDealViewModel topdealViewModel;
     private PaginationAdapter adapter;
     private RecyclerView recyclerViewDeal;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressBar progressBar;
     private ProgressBar progress_bottom;
-
-
-
-
     private RecyclerView deals_list;
     LinearLayoutManager linearLayoutManager;
 
@@ -48,7 +44,7 @@ public class ThirdFragment extends Fragment {
         // Inflate the layout for this fragment
         View v=inflater.inflate(R.layout.fragment_third, container, false);
 
-        dealViewModel = new ViewModelProvider(this).get(DealViewModel.class);
+        topdealViewModel = new ViewModelProvider(this).get(TopDealViewModel.class);
         progressBar = v.findViewById(R.id.progress_circular);
         progress_bottom = v.findViewById(R.id.progress_bottom);
         swipeRefreshLayout = v.findViewById(R.id.refreshLayout);
@@ -60,14 +56,14 @@ public class ThirdFragment extends Fragment {
         recyclerViewDeal.setItemAnimator(new DefaultItemAnimator());
         recyclerViewDeal.setAdapter(adapter);
 
-        dealViewModel.getDeals().observe(this, new Observer<List<Deal>>() {
+        topdealViewModel.getDeals().observe(this, new Observer<List<Deal>>() {
             @Override
             public void onChanged(List<Deal> users) {
                 adapter.addAll(users);
             }
         });
 
-        dealViewModel.isLoading().observe(this, new Observer<Boolean>() {
+        topdealViewModel.isLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isLoading) {
                 if (!isLoading && progressBar.getVisibility() == View.VISIBLE) {
@@ -75,7 +71,7 @@ public class ThirdFragment extends Fragment {
                 }
             }
         });
-        dealViewModel.isLoadingmore().observe(this, new Observer<Boolean>() {
+        topdealViewModel.isLoadingmore().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (!aBoolean && progress_bottom.getVisibility() == View.VISIBLE) {
@@ -86,7 +82,7 @@ public class ThirdFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                dealViewModel.refreshUsers();
+                topdealViewModel.refreshUsers();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -101,11 +97,11 @@ public class ThirdFragment extends Fragment {
                 int totalItemCount = layoutManager.getItemCount();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
 
-                if (!dealViewModel.isLoading().getValue() && !dealViewModel.isLastPage()) {
+                if (!topdealViewModel.isLoading().getValue() && !topdealViewModel.isLastPage()) {
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                             && firstVisibleItemPosition >= 0) {
                         progress_bottom.setVisibility(View.VISIBLE);
-                        dealViewModel.loadMoreUsers();
+                        topdealViewModel.loadMoreUsers();
                     }
                 }
             }
