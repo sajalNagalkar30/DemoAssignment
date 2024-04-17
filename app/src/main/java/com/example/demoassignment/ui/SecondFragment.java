@@ -1,4 +1,4 @@
-package com.example.demoassignment;
+package com.example.demoassignment.ui;
 
 import android.os.Bundle;
 
@@ -15,17 +15,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.example.demoassignment.adapter.PaginationAdapter;
+import com.example.demoassignment.R;
+import com.example.demoassignment.adapter.DealAdapter;
 import com.example.demoassignment.model.Deal;
 import com.example.demoassignment.model.TopDealViewModel;
 
 import java.util.List;
 
 
-public class ThirdFragment extends Fragment {
+public class SecondFragment extends Fragment {
 
     private TopDealViewModel topdealViewModel;
-    private PaginationAdapter adapter;
+    private DealAdapter adapter;
     private RecyclerView recyclerViewDeal;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressBar progressBar;
@@ -33,7 +34,7 @@ public class ThirdFragment extends Fragment {
     private RecyclerView deals_list;
     LinearLayoutManager linearLayoutManager;
 
-    public ThirdFragment() {
+    public SecondFragment() {
         // Required empty public constructor
     }
 
@@ -42,7 +43,7 @@ public class ThirdFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.fragment_third, container, false);
+        View v=inflater.inflate(R.layout.fragment_second, container, false);
 
         topdealViewModel = new ViewModelProvider(this).get(TopDealViewModel.class);
         progressBar = v.findViewById(R.id.progress_circular);
@@ -50,7 +51,7 @@ public class ThirdFragment extends Fragment {
         swipeRefreshLayout = v.findViewById(R.id.refreshLayout);
         recyclerViewDeal =v. findViewById(R.id.deals_list);
 
-        adapter = new PaginationAdapter(getContext());
+        adapter = new DealAdapter(getContext());
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerViewDeal.setLayoutManager(linearLayoutManager);
         recyclerViewDeal.setItemAnimator(new DefaultItemAnimator());
@@ -82,6 +83,7 @@ public class ThirdFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                adapter.clear();
                 topdealViewModel.refreshUsers();
                 swipeRefreshLayout.setRefreshing(false);
             }

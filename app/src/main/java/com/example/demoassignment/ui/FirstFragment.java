@@ -1,4 +1,4 @@
-package com.example.demoassignment;
+package com.example.demoassignment.ui;
 
 import android.os.Bundle;
 
@@ -14,18 +14,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
-import com.example.demoassignment.adapter.PaginationAdapter;
+
+import com.example.demoassignment.R;
+import com.example.demoassignment.adapter.DealAdapter;
 import com.example.demoassignment.model.Deal;
 import com.example.demoassignment.model.DealViewModel;
+import com.example.demoassignment.util.NetworkUtils;
 
 import java.util.List;
 
 
-public class FirstFragment extends Fragment {
-
+public class FirstFragment extends Fragment implements NetworkUtils.NetworkListener{
     private DealViewModel dealViewModel;
-    private PaginationAdapter adapter;
+    private DealAdapter adapter;
     private RecyclerView recyclerViewDeal;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressBar progressBar;
@@ -37,6 +40,7 @@ public class FirstFragment extends Fragment {
     private RecyclerView deals_list;
     LinearLayoutManager linearLayoutManager;
 
+
     public FirstFragment() {
         // Required empty public constructor
     }
@@ -47,14 +51,15 @@ public class FirstFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v=inflater.inflate(R.layout.fragment_first, container, false);
-
+        NetworkUtils networkUtils = new NetworkUtils(this);
+        networkUtils.registerNetworkCallback(getContext());
         dealViewModel = new ViewModelProvider(this).get(DealViewModel.class);
         progressBar = v.findViewById(R.id.progress_circular);
         progress_bottom = v.findViewById(R.id.progress_bottom);
         swipeRefreshLayout = v.findViewById(R.id.refreshLayout);
         recyclerViewDeal =v. findViewById(R.id.deals_list);
 
-        adapter = new PaginationAdapter(getContext());
+        adapter = new DealAdapter(getContext());
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerViewDeal.setLayoutManager(linearLayoutManager);
         recyclerViewDeal.setItemAnimator(new DefaultItemAnimator());
@@ -86,6 +91,7 @@ public class FirstFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                adapter.clear();
                 dealViewModel.refreshUsers();
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -117,4 +123,15 @@ public class FirstFragment extends Fragment {
 
         return v;
     }
+    @Override
+    public void onConnected() {
+        Toast.makeText(getContext(), "Internet Connected", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDisconnected() {
+        Toast.makeText(getContext(), "Internet Disconnected", Toast.LENGTH_SHORT).show();
+    }
+
+
 }

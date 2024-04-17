@@ -1,8 +1,9 @@
-package com.example.demoassignment;
+package com.example.demoassignment.ui;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -13,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import com.example.demoassignment.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -20,6 +22,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private ConstraintLayout no_internet_ui;
     private ViewPager2 viewPager;
     private TabLayout tabLayout;
     private ActionBarDrawerToggle toggle;
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         drawerLayout = findViewById(R.id.drawer_layout);
+        no_internet_ui = findViewById(R.id.no_internet_ui);
         navigationView = findViewById(R.id.nav_view);
         viewPager = findViewById(R.id.view_pager);
         tabLayout = findViewById(R.id.tabs);
@@ -101,4 +105,6 @@ public class MainActivity extends AppCompatActivity {
         };
         viewPager.setAdapter(adapter);
     }
+
+
 }
